@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="A Theoretical Study on Studying LLM Reasoning">
+  <meta name="keywords" content="LLM Reasoning, Calibration, Theorem">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Theoretical Study on Bridging Internal Probability and Self-Consistency for LLM Reasoning</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/fontawesome.min.css" integrity="sha384-NvKbDTEnL+A8F/AA5Tc5kmMLSJHUO868P+lDtTpJIeQdGYaUIuLr4lVGOEA1OcMy" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.23/dist/katex.min.css" integrity="sha384-//SZkxyB7axjCAopkAL1E1rve+ZSPKapD89Lo/lLhcsXR+zOYl5z6zJZEFXil+q0" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.23/dist/katex.min.js" integrity="sha384-cpAIxua0Xbyc+XrpHQpCtJzGSZ6U2kS/FeyoKjnS+BgAYNV6uVUetVs/LC9+l3rs" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.23/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+</head>
+<body>
+
+<nav class="navbar is-fixed-top" role="navigation" aria-label="navigation" style="font-family: 'Google Sans', sans-serif; background: white; box-shadow: none;">
+  <div class="container is-max-desktop">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="https://zhouz.dev">
+          <i class="fas fa-home"></i>&nbsp;&nbsp;&nbsp;Homepage
+        </a>
+      </div>
+      <div class="navbar-end" style="font-size: 17px; gap: 0px;">
+        <a class="navbar-item" href="#sec:theoretical">1. Theorecial Framework</a>
+        <a class="navbar-item" href="#sec:rpc">2. RPC Method</a>
+        <a class="navbar-item" href="#sec:empirical">3. Empirical Results</a>
+        <a class="navbar-item" href="#sec:future">4. Future Directions</a>
+        <a class="navbar-item" href="#sec:bibtex">BibTeX</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">A Theoretical Study on <br>Bridging Internal Probability and Self-Consistency for LLM Reasoning</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://zhouz.dev">Zhi Zhou</a><sup>1, †</sup>,</span>
+            <span class="author-block">Yuhao Tan</a><sup>1</sup>,
+            <span class="author-block"><a href="https://lizn-zn.github.io">Zenan Li</a><sup>2, †</sup>,</span>
+            <span class="author-block"><a href="https://cs.nju.edu.cn/yuanyao/">Yuan Yao</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="http://www.lamda.nju.edu.cn/guolz">Lan-Zhe Guo</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://cs.nju.edu.cn/liyf/">Yu-Feng Li</a><sup>1, <span style="font-size: 24px">✉</span></sup>,</span>
+            <span class="author-block"><a href="https://ics.nju.edu.cn/people/xiaoxingma/">Xiaoxing Ma</a><sup>1, <span style="font-size: 24px">✉</span></sup></span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>State Key Laboratory of Novel Software Technology, Nanjing University, China</span><br>
+            <span class="author-block"><sup>2</sup>Department of Computer Science, ETH Zurich, Switzerland</span><br>
+            <span class="author-block"><sup>✉</sup> Corresponding Author <sup>†</sup> Project Leader</span><br>
+            <span class="author-block"><a href="mailto:zhouz@nju.edu.cn">zhouz@lamda.nju.edu.cn</a></span><br>
+            <span class="author-block publication-venue">NeurIPS 2025</span>
+          </div>
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2502.00511" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span >Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2502.00511" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/WNJXYK/RPC/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/WNJXYK/Math-Reasoning-Paths"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">🤗</span>
+                  <span>Data</span>
+                </a>
+            </div>
+          </div>
+          <div class="column subtitle has-text-left">
+            <b><u>TL;DR</u></b>: 
+            We introduce the <i>first theoretical framework</i> for analyzing LLM reasoning errors, 
+            and bridge two typical test-time sampling methods to achieve <i>both low error and fast convergence</i>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Test-time sampling, which aims to sample multiple reasoning paths for a given input during inference, is a widely adopted technique to improve the reasoning performance of large language models (LLMs). However, despite its practical success, the theoretical foundations remain underexplored. 
+            In this paper, we provide the first theoretical framework for analyzing test-time sampling strategies, grounded in the perspective of confidence estimation. Based on the framework, we analyze two dominant paradigms: self-consistency and perplexity, and reveal key limitations: self-consistency suffers from high estimation error while perplexity exhibits substantial modeling error and possible degradation of the estimation error convergence. 
+            To address these limitations, we introduce <span class="dnerf">Rpc</span>, a hybrid method that leverages our theoretical insights through two key components: <i>Perplexity Consistency</i> and <i>Reasoning Pruning</i>. <i>Perplexity Consistency</i> combines the strengths of self-consistency and perplexity, boosting the convergence rate of estimation error from linear to exponential while preserving model error. <i>Reasoning Pruning</i> prevents degradation by eliminating low-probability reasoning paths. 
+            Both theoretical analysis and empirical results across seven benchmark datasets demonstrate that <span class="dnerf">Rpc</span> has a strong potential for reducing reasoning error. Notably, <span class="dnerf">Rpc</span> achieves reasoning performance comparable to self-consistency while not only enhancing confidence reliability but also reducing sampling costs by 50%. 
+        </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop" id="sec:theoretical">
+    <!-- Theoretical Framework. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">1. Theoretical Framework</h2>
+        <!-- General Formula -->
+        <h3 class="title is-4">1.1. Theorecial Definition</h3>
+        <div class="content has-text-centered" id="fig:llm-reasoning">
+          <img src="./static/images/LLM-Reasoning.png">
+          Figure 1: LLM Reasoning
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            The LLM reasoning process is illustrated in <a href="#fig:llm-reasoning">Figure 1</a>, where the LLM samples several reasoning paths \(\hat{t}_1, \ldots, \hat{t}_n\) for a given question \(x\) with the ground-truth answer \(y\).
+            A parsing function \(g(\cdot)\) then converts these reasoning paths into the corresponding candidate answers \(\hat{y}_1, \ldots, \hat{y}_n\). 
+            Test-time sampling methods, such as perplexity and self-consistency, are used to estimate the confidence of each candidate answer \(\hat{y}_i\), which is denoted as \(\hat{p} \left (\hat{y}_i \mid x \right )\). The ground-truth confidence is denoted by \(p \left (\hat{y}_i \mid x \right ) \).
+          </p>
+          <p>
+            The reasoning error of LLM for each sampled reasoning path \(\hat{t}_i\) or candidate answer \(\hat{y}_i\) is defined as follows: 
+            $$\begin{cases}
+            \mathcal{E}_{\hat{p}}(\hat{t}) =& \mathbb{E} \left [ \big ( \hat{p}(\hat{t} \,|\, x) - \mathbb{I}[g(\hat{t}) = y] \big )^2 \right ], \\
+            \mathcal{E}_{\hat{p}}(\hat{y}) =& \mathbb{E} \left [ \big ( \hat{p}(\hat{y} \,|\, x) - \mathbb{I}[\hat{y} = y] \big )^2 \right ].
+            \end{cases}$$
+          </p>
+        </div>
+      
+        <h3 class="title is-4">1.2. Theorecial Analysis</h3>
+        <h4 class="title is-5">General Decomposition (Proposition 1)</h4>
+        <div class="content has-text-justified">
+          <p>
+            First, we decompose the reasoning error of the LLM into two parts: <i>Estimation error</i> and <i>Model error</i>, as follows:
+            $$
+            \mathcal{E}_{\hat{p}}(\hat{y}) = \underbrace{\mathbb{E} \left [\big ( \hat{p}(\hat{y} \,|\, x) - p(\hat{y} \,|\, x) \big )^2 \right ]}_{\text{Estimation Error}} + \underbrace{\big ( p(\hat{y} \,|\, x) - \mathbb{I}[\hat{y} = y] \big )^2}_{\text{Model Error}}. 
+            $$
+            <ul>
+              <li>The <i>Estimation Error</i> depends solely on the sampling size and the confidence estimation strategy, which allows us to further analyze different test-time sampling methods.</li>
+              <li>The <i>Model Error</i> is invariant and is determined by the reasoning capability of the LLM, which eliminates the influence of different LLMs on reasoning in our theoretical analysis.</li>
+            </ul>
+          </p>
+        </div>
+        <h4 class="title is-5">Analysis of Self-Consistency (Proposition 2)</h4>
+        <div class="content has-text-justified">
+          <p>
+            Next, we analyze the typical self-consistency method (SC), which estimates the confidence using Monte Carlo estimation:
+            $$
+            \mathcal{E}_{\hat{p}^{(SC)}}(\hat{y}) 
+            =  \underbrace{\frac{1}{n} p(\hat{y} \,|\, x) (1- p(\hat{y}\,|\, x))}_{\text{Estimation Error}} 
+            +  \underbrace{\big (p(\hat{y} \,|\, x) - \mathbb{I}[\hat{y} = y] \big )^2}_{\text{Model Error}}. 
+            $$
+          </p>
+          <ul>
+            <li><span style="color: red"><b>SC only achieves a linear convergence rate of the estimation error corresponding to the sampling size</b></span>, which results in substantial reasoning error when sampling is
+              limited.</li>
+          </ul>
+        </div>
+        <h4 class="title is-5">Analysis of Perplexity (Proposition 3)</h4>
+        <div class="content has-text-justified">
+          Finally, we analyze the typical perplexity method (PPL), which estimates the confidence using the internal probability of the LLM:
+          <p>
+            $$
+            \mathcal{E}_{\hat{p}^{(PPL)}}(\hat{t}) = 
+            \underbrace{(1 - p(\hat{t} \,|\, x))^n {p}(\hat{t} \,|\, x) ( 2 \mathbb{I}[\hat{y}_i = y] - p(\hat{t} \,|\, x) ) }_{\text{Estimation Error}} 
+            + \underbrace{\big ( p(\hat{t} \,|\, x) - \mathbb{I}[g(\hat{t}) = y] \big )^2}_{\text{Model Error}}. 
+            $$
+          </p>
+          <ul>
+            <li><span style="color: blue"><b>Compared with SC, the estimation error of PPL decreases exponentially</b></span>, and the rate depends on the value of the ground-truth confidence \(p(\hat{t}\,|\, x)\).</li>
+            <li><span style="color: red"><b>The model error of PPL is not satisfactory</b></span> because it is computed using the raw reasoning paths, which ignore the structure of the answer space defined by the parsing function \(g(\cdot)\).</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+    <!--/ Theoretical Framework. -->
+
+    <!-- RPC Method. -->
+    <div class="columns is-centered" id="sec:rpc">
+      <div class="column is-full-width">
+        <h2 class="title is-3">2. <span class="dnerf">Rpc</span> Method</h2>
+        <h3 class="title is-4">2.1. Illustration of <span class="dnerf">Rpc</span></h3>
+        <div class="content has-text-justified">
+          <p>
+            Motivated by our theoretical analysis, we propose the <span class="dnerf">Rpc</span> method, which combines self-consistency and the internal probability of LLMs to achieve both <span style="color: blue"><b>low model error as in SC</b></span> and <span style="color: blue"><b>a fast convergence rate as in PPL</b></span>.
+            The <span class="dnerf">Rpc</span> method consists of two key components: <i>Perplexity Consistency (PC)</i> and <i>Reasoning Pruning (RP)</i>, as illustrated in <a href="#fig:rpc-method">Figure 2</a>:
+            <ul>
+              <li><i>Perplexity Consistency</i> integrates internal LLM probabilities into the self-consistency framework, which ensures that the convergence rate of the estimation error improves from linear to exponential in most cases.</li>
+              <li><i>Reasoning Pruning (RP)</i> automatically eliminates reasoning paths with low probabilities to prevent the convergence rate of the estimation error from reverting to linear in the remaining cases.</li>
+            </ul>
+          </p>
+        </div>
+        <div class="content has-text-centered" id="fig:rpc-method">
+          <img src="./static/images/RPC-Framework.png">
+          Figure 2: RPC Method
+        </div>
+        <h3 class="title is-4">2.2. Analysis of <span class="dnerf">Rpc</span> (Theorem 4 and Theorem 7)</h3>
+        <div class="content has-text-justified">
+          <p>
+            We first show that PC can increase the convergence rate of the estimation error to exponential when \(\alpha\) is not very small, while maintaining the same model error as SC:
+            $$
+            \mathcal{E}_{\hat{p}^{(PC)}}(\hat{y})
+              =  \underbrace{ \alpha^n p(\hat{y} \,|\, x) \big(2 \mathbb{I}[\hat{y}=y] - (1 + \alpha^n) p(\hat{y} \,|\, x) \big) }_{\text{Estimation Error}} 
+            + \underbrace{\left ( p(\hat{y} \,|\, x) - \mathbb{I}[\hat{y} = y] \right )^2}_{\text{Model Error}}, 
+            $$
+            where \(k = |\{\tilde{t} \mid g(\tilde{t}) = \hat{y}\}|\) and \(\alpha := 1 - \frac{1}{k} p(\hat{y} \,|\, x)\).
+          </p>
+          <p>
+            Then, our Theorem 7 proves that RP can eliminate candidate answers with low probabilities by directly pruning the reasoning paths, thereby eliminating the cases where \(\alpha \rightarrow 0\).
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ RPC Method. -->
+
+    <!-- Empirical Results. -->
+    <div class="columns is-centered" id="sec:empirical">
+      <div class="column is-full-width">
+        <h2 class="title is-3">3. Empirical Results</h2>
+        <!-- General Formula -->
+        <h3 class="title is-4">3.1. Efficiency</h3>
+        <div class="content has-text-centered" id="table:efficiency">
+          Table 1: Efficiency of <span class="dnerf">Rpc</span> Method
+          <img src="./static/images/Efficiency.png">
+        </div>
+        <div class="content has-text-justified">
+          <p>
+          As shown in <a href="#table:efficiency">Table 1</a>, <span class="dnerf">Rpc</span> achieves a 50% reduction in sampling costs compared to SC while maintaining the same reasoning performance. Therefore, <span class="dnerf">Rpc</span> offers an excellent computational trade-off, where minimal computational overhead of RP is exchanged for significant time savings by reducing the number of required LLM inferences.
+          </p>
+        </div>
+        <h3 class="title is-4">3.2. Efficacy</h3>
+        <div class="content has-text-centered" id="fig:efficacy">
+          <img src="./static/images/Efficacy.png">
+          Figure 3: Efficacy of <span class="dnerf">Rpc</span> Method
+        </div>
+        <div class="content has-text-justified">
+          <p>
+          We evaluate the performance of PC and RPC in <a href="#fig:efficacy">Figure 3</a> across various sample budgets. The results show that <span class="dnerf">Rpc</span> consistently achieves better performance than both PPL and SC. The performance gap between <span class="dnerf">Rpc</span> and PC indicates the effectiveness of the RP module, while the gap between PC and SC indicates the effectiveness of the PC module.
+          </p>
+        </div>
+        <h3 class="title is-4">3.3. Reliability</h3>
+        <div class="content has-text-centered" id="table:reliability">
+          Table 2: Reliability of <span class="dnerf">Rpc</span> Method
+          <img src="./static/images/Reliability.png">
+        </div>
+        <div class="content has-text-justified">
+          <p>
+          As shown in <a href="#table:reliability">Table 2</a>, we report the ECE metric for each method, and the results show that <span class="dnerf">Rpc</span> achieves the lowest average ECE across all datasets. This indicates that <span class="dnerf">Rpc</span> not only improves the LLM reasoning accuracy but also enhances the reliability of the estimated confidence for each candidate answer.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Empirical Results. -->
+
+    <!-- Future Work. -->
+    <div class="columns is-centered" id="sec:future">
+      <div class="column is-full-width">
+        <h2 class="title is-3">4. Future Directions</h2>
+        <div class="content has-text-justified">
+          <ul>
+            <li>
+              <b>Analyzing Test-Time Sampling Methods</b>: 
+              Our paper shows that our theoretical framework is general enough to analyze two typical test-time sampling methods. 
+              It can also be easily extended to analyze other advanced test-time sampling methods that originate from these two types of methods.
+            </li>
+            <li>
+              <b>Exploring Advanced Sampling Strategies</b>: 
+              Our theoretical results indicate that better convergence requires an effective sampling strategy to sample sufficiently diverse reasoning paths, which is not deeply investigated in this paper. 
+              Improved sampling strategies could be designed by drawing inspiration from our theoretical framework.
+            </li>
+            <li>
+              <b>Applying to Diverse Reasoning Tasks</b>: 
+              In our paper, we show that the <span class="dnerf">Rpc</span> method is effective on math, code, and logical reasoning tasks without exploiting task-specific properties. 
+              Task-specific methods could be developed based on our theoretical framework to achieve better performance (e.g., by considering the properties of the parsing function \(g\)).
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="section" id="sec:bibtex">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{zhou24theoretical,
+  author    = {Zhou, Zhi and Tan, Yuhao and Li, Zenan and Yao, Yuan and Guo, Lan-Zhe and Li, Yu-Feng and Ma, Xiaoxing},
+  title     = {A Theorecial Study on Bridging Internal Probability and Self-Consistency for LLM Reasoning},
+  journal   = {Advances in Neural Information Processing Systems},
+  year      = {2025},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+          <p>This website is forked from <a href="https://nerfies.github.io">Nerfies</a> and has been subsequently modified by <a href="https://zhouz.dev">Zhi Zhou</a>.</p>
+        </div>
+      </div>
+    </div>
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="https://arxiv.org/pdf/2502.00511">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/WNJXYK" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
