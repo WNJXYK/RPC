@@ -5,10 +5,13 @@ Official Repository for NeurIPS 2025 Paper: "A Theoretical Study on Bridging Int
 
 <div align="center">
 <a href="https://arxiv.org/pdf/2502.00511">📄 [Paper]</a>
-&nbsp;
+•
 <a href="https://wnjxyk.github.io/RPC">🌐 [Project]</a>
-&nbsp;
+•
 <a href="https://huggingface.co/collections/WNJXYK/mathematical-llm-reasoning-paths-68e4c4e32e3ad7fa0fcad77a">🤗 [Data Collection]</a>
+•
+<a href="https://huggingface.co/spaces/WNJXYK/RPC">💻 [Demo]</a>
+
 </div>
 
 
