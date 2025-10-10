@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zhouz.dev/RPC/sitemap.xml
+
+# Academic research paper - allow all crawling
+Disallow:

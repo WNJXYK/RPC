@@ -1,11 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="A Theoretical Study on Studying LLM Reasoning">
-  <meta name="keywords" content="LLM Reasoning, Calibration, Theorem">
+  <meta name="description" content="A theoretical study on LLM reasoning, exploring the combination of self-consistency and perplexity (internal probability) to enhance performance. Published at NeurIPS 2025.">
+  <meta name="keywords" content="LLM Reasoning, Self-Consistency, Perplexity, Sampling, Theorem, Calibration, NeurIPS, Large Language Models, Machine Learning, AI, LLM">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>A Theoretical Study on Bridging Internal Probability and Self-Consistency for LLM Reasoning</title>
+  <meta name="author" content="Zhi Zhou, Yuhao Tan, Zenan Li, Yuan Yao, Lan-Zhe Guo, Yu-Feng Li, Xiaoxing Ma">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="en">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="A Theoretical Study on Bridging Internal Probability and Self-Consistency for LLM Reasoning">
+  <meta property="og:description" content="A theoretical study on LLM reasoning, exploring the combination of self-consistency and perplexity (internal probability) to enhance performance. Published at NeurIPS 2025.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://zhouz.dev/RPC/">
+  <meta property="og:site_name" content="RPC - LLM Reasoning Research">
+  <meta property="og:image" content="https://zhouz.dev/RPC/static/images/RPC-Framework.png">
+  <meta property="og:image:alt" content="RPC Method Framework Diagram">
+  <meta property="article:author" content="Zhi Zhou, Yuhao Tan, Zenan Li, Yuan Yao, Lan-Zhe Guo, Yu-Feng Li, Xiaoxing Ma">
+  <meta property="article:published_time" content="2025-01-01">
+  <meta property="article:section" content="Machine Learning">
+  <meta property="article:tag" content="LLM, Reasoning, Self-Consistency, Perplexity">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A Theoretical Study on Bridging Internal Probability and Self-Consistency for LLM Reasoning">
+  <meta name="twitter:description" content="A theoretical study on LLM reasoning, exploring the combination of self-consistency and perplexity to enhance performance. Published at NeurIPS 2025.">
+  <meta name="twitter:image" content="https://zhouz.dev/RPC/static/images/RPC-Framework.png">
+  <meta name="twitter:image:alt" content="RPC Method Framework Diagram">
+  
+  <title>A Theoretical Study on Bridging Internal Probability and Self-Consistency for LLM Reasoning | NeurIPS 2025</title>
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://zhouz.dev/RPC/">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "A Theoretical Study on Bridging Internal Probability and Self-Consistency for LLM Reasoning",
+    "description": "A theoretical study on LLM reasoning, exploring the combination of self-consistency and perplexity (internal probability) to enhance performance.",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "Zhi Zhou",
+        "url": "https://zhouz.dev",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Nanjing University"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Yuhao Tan",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Nanjing University"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Zenan Li",
+        "url": "https://lizn-zn.github.io",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "ETH Zurich"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Yuan Yao",
+        "url": "https://cs.nju.edu.cn/yuanyao/",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Nanjing University"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Lan-Zhe Guo",
+        "url": "http://www.lamda.nju.edu.cn/guolz",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Nanjing University"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Yu-Feng Li",
+        "url": "https://cs.nju.edu.cn/liyf/",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Nanjing University"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Xiaoxing Ma",
+        "url": "https://ics.nju.edu.cn/people/xiaoxingma/",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Nanjing University"
+        }
+      }
+    ],
+    "publisher": {
+      "@type": "Organization",
+      "name": "NeurIPS",
+      "url": "https://neurips.cc"
+    },
+    "datePublished": "2025-01-01",
+    "dateModified": "2025-01-01",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://zhouz.dev/RPC/"
+    },
+    "url": "https://zhouz.dev/RPC/",
+    "keywords": "LLM Reasoning, Self-Consistency, Perplexity, Sampling, Theorem, Calibration, NeurIPS, Large Language Models, Machine Learning, AI, LLM",
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "Large Language Models",
+        "description": "AI models that process and generate human-like text"
+      },
+      {
+        "@type": "Thing",
+        "name": "Machine Learning",
+        "description": "Field of artificial intelligence focused on algorithms and statistical models"
+      },
+      {
+        "@type": "Thing",
+        "name": "Neural Networks",
+        "description": "Computing systems inspired by biological neural networks"
+      }
+    ],
+    "citation": [
+      {
+        "@type": "CreativeWork",
+        "name": "arXiv preprint",
+        "url": "https://arxiv.org/pdf/2502.00511"
+      }
+    ],
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "image": "https://zhouz.dev/RPC/static/images/RPC-Framework.png"
+  }
+  </script>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/bulma.min.css">
@@ -55,7 +195,8 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">A Theoretical Study on <br>Bridging Internal Probability and Self-Consistency for LLM Reasoning</h1>
+          <header>
+            <h1 class="title is-1 publication-title">A Theoretical Study on <br>Bridging Internal Probability and Self-Consistency for LLM Reasoning</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block"><a href="https://zhouz.dev">Zhi Zhou</a><sup>1, †</sup>,</span>
             <span class="author-block">Yuhao Tan</a><sup>1</sup>,
@@ -72,6 +213,7 @@
             <span class="author-block"><a href="mailto:zhouz@nju.edu.cn">zhouz@lamda.nju.edu.cn</a></span><br>
             <span class="author-block publication-venue">NeurIPS 2025</span>
           </div>
+          </header>
           <div class="column has-text-centered">
             <div class="publication-links">
               <span class="link-block">
@@ -119,6 +261,13 @@
                   <span>Demo</span>
                 </a>
               </span>
+              <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">👀</span>
+                  <span>View: <span id="busuanzi_value_site_pv"></span></span>
+                </a>
+              </span>
             </div>
           </div>
           <div class="column subtitle has-text-left">
@@ -162,7 +311,7 @@
         <!-- General Formula -->
         <h3 class="title is-4">1.1. Theorecial Definition</h3>
         <div class="content has-text-centered" id="fig:llm-reasoning">
-          <img src="./static/images/LLM-Reasoning.png">
+          <img src="./static/images/LLM-Reasoning.png" alt="LLM Reasoning Process Diagram showing sampling paths and candidate answers" loading="lazy">
           Figure 1: LLM Reasoning
         </div>
         <div class="content has-text-justified">
@@ -245,7 +394,7 @@
           </p>
         </div>
         <div class="content has-text-centered" id="fig:rpc-method">
-          <img src="./static/images/RPC-Framework.png">
+          <img src="./static/images/RPC-Framework.png" alt="RPC Method Framework Diagram showing Perplexity Consistency and Reasoning Pruning components" loading="lazy">
           Figure 2: RPC Method
         </div>
         <h3 class="title is-4">2.2. Analysis of <span class="dnerf">Rpc</span> (Theorem 4 and Theorem 7)</h3>
@@ -275,7 +424,7 @@
         <h3 class="title is-4">3.1. Efficiency</h3>
         <div class="content has-text-centered" id="table:efficiency">
           Table 1: Efficiency of <span class="dnerf">Rpc</span> Method
-          <img src="./static/images/Efficiency.png">
+          <img src="./static/images/Efficiency.png" alt="Efficiency comparison table showing 50% reduction in sampling costs for RPC method" loading="lazy">
         </div>
         <div class="content has-text-justified">
           <p>
@@ -284,7 +433,7 @@
         </div>
         <h3 class="title is-4">3.2. Efficacy</h3>
         <div class="content has-text-centered" id="fig:efficacy">
-          <img src="./static/images/Efficacy.png">
+          <img src="./static/images/Efficacy.png" alt="Efficacy comparison chart showing RPC method performance across different sample budgets" loading="lazy">
           Figure 3: Efficacy of <span class="dnerf">Rpc</span> Method
         </div>
         <div class="content has-text-justified">
@@ -295,7 +444,7 @@
         <h3 class="title is-4">3.3. Reliability</h3>
         <div class="content has-text-centered" id="table:reliability">
           Table 2: Reliability of <span class="dnerf">Rpc</span> Method
-          <img src="./static/images/Reliability.png">
+          <img src="./static/images/Reliability.png" alt="Reliability comparison table showing ECE metrics for different methods" loading="lazy">
         </div>
         <div class="content has-text-justified">
           <p>
