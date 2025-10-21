@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="description" content="A theoretical study on LLM reasoning, exploring the combination of self-consistency and perplexity (internal probability) to enhance performance. Published at NeurIPS 2025.">
-  <meta name="keywords" content="LLM Reasoning, Self-Consistency, Perplexity, Sampling, Theorem, Calibration, NeurIPS, Large Language Models, Machine Learning, AI, LLM">
+  <meta name="keywords" content="LLM Reasoning, Self-Consistency, Perplexity, Test-Time Scaling, NeurIPS, LLM">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Zhi Zhou, Yuhao Tan, Zenan Li, Yuan Yao, Lan-Zhe Guo, Yu-Feng Li, Xiaoxing Ma">
   <meta name="robots" content="index, follow">
@@ -117,7 +117,7 @@
       "@id": "https://zhouz.dev/RPC/"
     },
     "url": "https://zhouz.dev/RPC/",
-    "keywords": "LLM Reasoning, Self-Consistency, Perplexity, Sampling, Theorem, Calibration, NeurIPS, Large Language Models, Machine Learning, AI, LLM",
+    "keywords": "LLM Reasoning, Self-Consistency, Perplexity, Test-Time Scaling, NeurIPS, LLM",
     "about": [
       {
         "@type": "Thing",
@@ -248,17 +248,18 @@
               </span>
               <!-- Dataset Link. -->
               <span class="link-block">
-                <a href="https://huggingface.co/collections/WNJXYK/mathematical-llm-reasoning-paths-68e4c4e32e3ad7fa0fcad77a"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">🤗</span>
-                  <span>Data Collection</span>
-                </a>
-              </span>
-              <span class="link-block">
                 <a href="https://huggingface.co/spaces/WNJXYK/RPC"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">💻</span>
                   <span>Demo</span>
+                </a>
+              </span>
+              <br>
+              <span class="link-block">
+                <a href="https://huggingface.co/papers/2510.15444"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">🤗</span>
+                  <span>HF #1 Paper of the Day</span>
                 </a>
               </span>
               <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -273,7 +274,7 @@
           <div class="column subtitle has-text-left">
             <b><u>TL;DR</u></b>: 
             We introduce the <i>first theoretical framework</i> for analyzing LLM reasoning errors, 
-            and bridge two typical test-time sampling methods to achieve <i>both low error and fast convergence</i>.
+            and bridge typical sampling-based test-time scaling methods to achieve <i>both low error and fast convergence</i>.
           </div>
         </div>
       </div>
@@ -289,10 +290,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Test-time sampling, which aims to sample multiple reasoning paths for a given input during inference, is a widely adopted technique to improve the reasoning performance of large language models (LLMs). However, despite its practical success, the theoretical foundations remain underexplored. 
-            In this paper, we provide the first theoretical framework for analyzing test-time sampling strategies, grounded in the perspective of confidence estimation. Based on the framework, we analyze two dominant paradigms: self-consistency and perplexity, and reveal key limitations: self-consistency suffers from high estimation error while perplexity exhibits substantial modeling error and possible degradation of the estimation error convergence. 
-            To address these limitations, we introduce <span class="dnerf">Rpc</span>, a hybrid method that leverages our theoretical insights through two key components: <i>Perplexity Consistency</i> and <i>Reasoning Pruning</i>. <i>Perplexity Consistency</i> combines the strengths of self-consistency and perplexity, boosting the convergence rate of estimation error from linear to exponential while preserving model error. <i>Reasoning Pruning</i> prevents degradation by eliminating low-probability reasoning paths. 
-            Both theoretical analysis and empirical results across seven benchmark datasets demonstrate that <span class="dnerf">Rpc</span> has a strong potential for reducing reasoning error. Notably, <span class="dnerf">Rpc</span> achieves reasoning performance comparable to self-consistency while not only enhancing confidence reliability but also reducing sampling costs by 50%. 
+            Test-time scaling seeks to improve the reasoning performance of large language models (LLMs) by adding computational resources. A prevalent approach within the field is sampling-based test-time scaling methods, which enhance reasoning by generating multiple reasoning paths for a given input during inference. However, despite its practical success, the theoretical foundations remain underexplored. In this paper, we provide the first theoretical framework for analyzing sampling-based test-time scaling methods, grounded in the perspective of confidence estimation. Based on the framework, we analyze two dominant paradigms: self-consistency and perplexity, and reveal key limitations: self-consistency suffers from high estimation error while perplexity exhibits substantial modeling error and possible degradation of the estimation error convergence. To address these limitations, we introduce <span class="dnerf">Rpc</span>, a hybrid method that leverages our theoretical insights through two key components: Perplexity Consistency and Reasoning Pruning. Perplexity Consistency combines the strengths of self-consistency and perplexity, boosting the convergence rate of estimation error from linear to exponential while preserving model error. Reasoning Pruning prevents degradation by eliminating low-probability reasoning paths. Both theoretical analysis and empirical results across seven benchmark datasets demonstrate that <span class="dnerf">Rpc</span> has a strong potential for reducing reasoning error. Notably, RPC achieves reasoning performance comparable to self-consistency while not only enhancing confidence reliability but also reducing sampling costs by 50%.
         </p>
         </div>
       </div>
@@ -318,7 +316,7 @@
           <p>
             The LLM reasoning process is illustrated in <a href="#fig:llm-reasoning">Figure 1</a>, where the LLM samples several reasoning paths \(\hat{t}_1, \ldots, \hat{t}_n\) for a given question \(x\) with the ground-truth answer \(y\).
             A parsing function \(g(\cdot)\) then converts these reasoning paths into the corresponding candidate answers \(\hat{y}_1, \ldots, \hat{y}_n\). 
-            Test-time sampling methods, such as perplexity and self-consistency, are used to estimate the confidence of each candidate answer \(\hat{y}_i\), which is denoted as \(\hat{p} \left (\hat{y}_i \mid x \right )\). The ground-truth confidence is denoted by \(p \left (\hat{y}_i \mid x \right ) \).
+            Sampling-based test-time scaling methods, such as perplexity and self-consistency, are used to estimate the confidence of each candidate answer \(\hat{y}_i\), which is denoted as \(\hat{p} \left (\hat{y}_i \mid x \right )\). The ground-truth confidence is denoted by \(p \left (\hat{y}_i \mid x \right ) \).
           </p>
           <p>
             The reasoning error of LLM for each sampled reasoning path \(\hat{t}_i\) or candidate answer \(\hat{y}_i\) is defined as follows: 
@@ -338,7 +336,7 @@
             \mathcal{E}_{\hat{p}}(\hat{y}) = \underbrace{\mathbb{E} \left [\big ( \hat{p}(\hat{y} \,|\, x) - p(\hat{y} \,|\, x) \big )^2 \right ]}_{\text{Estimation Error}} + \underbrace{\big ( p(\hat{y} \,|\, x) - \mathbb{I}[\hat{y} = y] \big )^2}_{\text{Model Error}}. 
             $$
             <ul>
-              <li>The <i>Estimation Error</i> depends solely on the sampling size and the confidence estimation strategy, which allows us to further analyze different test-time sampling methods.</li>
+              <li>The <i>Estimation Error</i> depends solely on the sampling size and the confidence estimation strategy, which allows us to further analyze different sampling-based test-time scaling methods.</li>
               <li>The <i>Model Error</i> is invariant and is determined by the reasoning capability of the LLM, which eliminates the influence of different LLMs on reasoning in our theoretical analysis.</li>
             </ul>
           </p>
@@ -462,9 +460,9 @@
         <div class="content has-text-justified">
           <ul>
             <li>
-              <b>Analyzing Test-Time Sampling Methods</b>: 
-              Our paper shows that our theoretical framework is general enough to analyze two typical test-time sampling methods. 
-              It can also be easily extended to analyze other advanced test-time sampling methods that originate from these two types of methods.
+              <b>Analyzing Sampling-Based Test-Time Scaling Methods</b>: 
+              Our paper shows that our theoretical framework is general enough to analyze two typical sampling-based test-time scaling methods. 
+              It can also be easily extended to analyze other advanced sampling-based test-time scaling methods that originate from these two types of methods.
             </li>
             <li>
               <b>Exploring Advanced Sampling Strategies</b>: 
